@@ -21,6 +21,7 @@ const SignInForm = () => {
 	const signInWithGoogle = async () => {
 		const { user } = await siginInWithGooglePopup();
 		await createUserDocumentFromAuth(user);
+		
 	};
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -29,9 +30,20 @@ const SignInForm = () => {
 				email,
 				password
 			);
-			console.log(response)
+			console.log(response);
 			resetFormFields();
-		} catch (err) {}
+		} catch (err) {
+			switch (err.code) {
+				case 'auth/user-not-found':
+					alert('없는 아이디입니다');
+					break;
+				case 'auth/wrong-password':
+					alert('비밀번호를 확인하세요');
+					break;
+				default:
+					console.log(err);
+			}
+		}
 	};
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -62,7 +74,7 @@ const SignInForm = () => {
 
 				<div className='buttons-container'>
 					<Button type='submit'>로그인</Button>
-					<Button type='submit' buttonType='google' onClick={signInWithGoogle}>
+					<Button type='button' buttonType='google' onClick={signInWithGoogle}>
 						google 로그인
 					</Button>
 				</div>
