@@ -1,0 +1,88 @@
+import { useState } from 'react';
+import {
+	createAuthUserWithEmailAndPassword,
+	createUserDocumentFromAuth,
+} from '../../utils/firebase/firebase.utils';
+const defaultFormFields = {
+	displayName: '',
+	email: '',
+	password: '',
+	confirmPassword: '',
+};
+const SignUpForm = () => {
+	const [formFields, setFormfields] = useState(defaultFormFields);
+	const { displayName, email, password, confirmPassword } = formFields;
+
+	const resetFormFields = () => {
+		setFormfields(defaultFormFields);
+	};
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		if (password !== confirmPassword) {
+			alert('비밀번호를 확인하세요');
+			return;
+		}
+		try {
+			const { user } = await createAuthUserWithEmailAndPassword(
+				email,
+				password
+			);
+			console.log(user);
+			await createUserDocumentFromAuth(user, { displayName });
+			resetFormFields();
+		} catch (err) {
+			if (err.code === 'auth/email-already-in-user') {
+				alert('사용중인 메일입니다');
+			} else {
+				console.log('user creation encounterd an error', err);
+			}
+		}
+	};
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setFormfields({ ...formFields, [name]: value });
+	};
+
+	return (
+		<div>
+			<h1>Sign up with your email and password</h1>
+			<form onSubmit={handleSubmit}>
+				<label htmlFor='name'>이름</label>
+				<input
+					name='displayName'
+					value={displayName}
+					onChange={handleChange}
+					type='text'
+					required
+				/>
+				<label htmlFor=''>이메일</label>
+				<input
+					name='email'
+					value={email}
+					onChange={handleChange}
+					type='email'
+					required
+				/>
+				<label htmlFor=''>비밀번호</label>
+				<input
+					name='password'
+					value={password}
+					onChange={handleChange}
+					type='password'
+					required
+				/>
+				<label htmlFor=''>비밀번호 확인</label>
+				<input
+					name='confirmPassword'
+					value={confirmPassword}
+					onChange={handleChange}
+					type='password'
+					required
+				/>
+
+				<button type='submit'>Sign up</button>
+			</form>
+		</div>
+	);
+};
+export default SignUpForm;
