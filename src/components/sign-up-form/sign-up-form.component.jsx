@@ -49,7 +49,6 @@ const SignUpForm = () => {
 	return (
 		<div className='sign-up-container'>
 			<h2>아이디가 없으신가요?</h2>
-			<h2>Sign In</h2>
 			<span>회원가입</span>
 			<form onSubmit={handleSubmit}>
 				<FormInput
