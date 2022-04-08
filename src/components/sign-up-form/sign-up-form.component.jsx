@@ -4,6 +4,8 @@ import {
 	createUserDocumentFromAuth,
 } from '../../utils/firebase/firebase.utils';
 import FormInput from '../form-input/form-input.component';
+import Button from '../button/button.component';
+import './sign-up-form.styles.scss';
 const defaultFormFields = {
 	displayName: '',
 	email: '',
@@ -45,8 +47,10 @@ const SignUpForm = () => {
 	};
 
 	return (
-		<div>
-			<h1>Sign up with your email and password</h1>
+		<div className='sign-up-container'>
+			<h2>아이디가 없으신가요?</h2>
+			<h2>Sign In</h2>
+			<span>회원가입</span>
 			<form onSubmit={handleSubmit}>
 				<FormInput
 					label='이름'
@@ -81,8 +85,8 @@ const SignUpForm = () => {
 					required
 				/>
 
-				<button type='submit'>Sign up</button>
-			</form>
+				<Button type='submit'>Sign up</Button>
+				</form>
 		</div>
 	);
 };
